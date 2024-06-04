@@ -1,28 +1,92 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.clickable-coin').addEventListener('click', function(event) {
-        const x = event.clientX;
-        const y = event.clientY
+document.addEventListener("DOMContentLoaded", () => {
+    const gameField = document.getElementById("gameField");
+    const mainSquare = document.getElementById("mainSquare");
+    const scoreDisplay = document.getElementById("score");
 
-        const img = document.createElement('img');
-        img.src = 'static/plus1.png'; // Путь к вашей картинке
-        img.style.position = 'absolute';
-        img.style.width = '50px';
-        img.style.height = '50px';
-        img.style.left = (x - 10) + 'px'; // Установка координаты X картинки
-        img.style.top = (y - 10) + 'px'; // Установка координаты Y картинки
+    let isMoving = false;
+    let greenSquares = [];
+    let score = 0;
 
-        // Добавление картинки в документ
-        document.body.appendChild(img);
+    // Появление главного квадрата в центре через 3 секунды
+    setTimeout(() => {
+        mainSquare.style.display = 'block';
+        generateInitialGreenSquares();
+    }, 3000);
 
-        // Анимация перемещения картинки
-        const interval = setInterval(function() {
-            img.style.top = (parseInt(img.style.top) - 2) + 'px'; // Уменьшение координаты Y картинки для движения вверх
-            if (parseInt(img.style.top) <= y - 50) { // Проверка достижения заданной высоты
-                clearInterval(interval); // Остановка анимации
-                document.body.removeChild(img); // Удаление картинки из документа
+    // Генерация начальных зеленых квадратов
+    function generateInitialGreenSquares() {
+        for (let i = 0; i < 4; i++) {
+            createGreenSquare();
+        }
+    }
+
+    // Генерация зеленых квадратов по очереди
+    function createGreenSquare() {
+        const greenSquare = document.createElement('div');
+        greenSquare.classList.add('greenSquare');
+
+        // Генерация случайной позиции
+        const randomX = Math.random() * (gameField.clientWidth - 30);
+        const randomY = Math.random() * (gameField.clientHeight - 30);
+
+        greenSquare.style.left = `${randomX}px`;
+        greenSquare.style.top = `${randomY}px`;
+
+        gameField.appendChild(greenSquare);
+        greenSquares.push(greenSquare);
+
+        // Удаление зеленого квадрата через 5 секунд (с миганием)
+        setTimeout(() => {
+            if (greenSquare.parentElement) {
+                greenSquare.remove();
+                greenSquares = greenSquares.filter(sq => sq !== greenSquare);
+
+                // Проверка, нужно ли создать новый квадрат
+                if (greenSquares.length < 4) {
+                    createGreenSquare();
+                }
             }
-        }, 10); // Интервал анимации (10 миллисекунд)
+        }, 5000);
+    }
+
+    gameField.addEventListener("click", (event) => {
+        if (isMoving) return;
+
+        const target = event.target;
+        if (!target.classList.contains('greenSquare')) return;
+
+        isMoving = true;
+
+        // Перемещение главного квадрата к зеленому квадрату
+        const targetX = target.style.left;
+        const targetY = target.style.top;
+
+        mainSquare.style.left = targetX;
+        mainSquare.style.top = targetY;
+
+        // Ожидание завершения перемещения, затем удаление зеленого квадрата и увеличение счета
+        setTimeout(() => {
+            target.remove();
+            greenSquares = greenSquares.filter(sq => sq !== target);
+
+            score++;
+            scoreDisplay.textContent = `Счет: ${score}`;
+
+            // Проверка, нужно ли создать новый квадрат
+            if (greenSquares.length < 4) {
+                createGreenSquare();
+            }
+
+            isMoving = false;
+        }, 1000); // Убедимся, что это соответствует времени перехода
     });
+
+    // Запуск создания зеленых квадратов с интервалом
+    setInterval(() => {
+        if (greenSquares.length < 4) {
+            createGreenSquare();
+        }
+    }, 1000); // Проверка каждые 1 секунду
 });
 
 
