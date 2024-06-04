@@ -1,152 +1,53 @@
-body {
+body, html {
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #3a3a3a;
-    font-family: Arial, sans-serif;
 }
 
-.container {
-    width: 430px;
-    height: 932px;
-    background-color: #2C2C2C;
-    border: 1px solid #3FE0D0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
+#score {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-.score {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
+#gameField {
+    width: 90vw;
+    height: 90vh;
+    background-color: lightgrey;
+    position: relative;
 }
 
-.coin-icon {
+#mainSquare {
     width: 50px;
     height: 50px;
-    margin-right: 20px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 1s ease; /* Увеличена скорость перемещения */
 }
 
-.score-text {
-    font-family: 'Gemunu Libre', sans-serif;
-    font-size: 70px;
-    font-weight: 500;
-    color: #FFFFFF;
+.greenSquare {
+    width: 30px;
+    height: 30px;
+    background-color: green;
+    position: absolute;
+    animation: fadeOut 5s forwards;
 }
 
-.level {
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.trophy-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-}
-
-.level-text {
-    font-family: 'GEO', sans-serif;
-    font-style: oblique;
-    font-size: 40px;
-    font-weight: 500;
-    color: #FFFFFF;
-}
-
-.clickable-coin {
-    margin-top: 100px;
-}
-
-.clickable-coin img {
-    width: 300px;
-    height: 300px;
-    cursor: pointer;
-}
-
-.energy {
-    margin-top: 70px;
-    display: flex;
-    align-items: center;
-}
-
-.energy-icon {
-    width: 48px;
-    height: 48px;
-    margin-right: 1px;
-}
-
-.energy-text {
-    margin-right: 60px;
-    font-family: 'GEO', sans-serif;
-    font-size: 40px;
-    font-style: oblique;
-    color: #FFFFFF;
-}
-
-.energy-bar {
-    margin-top: 30px;
-    width: 388px;
-    height: 28px;
-    background-color: #ccc;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-.energy-fill {
-    height: 100%;
-    background-color: #39FF14;
-    border-radius: 14px;
-}
-
-.buttons {
-    border-radius: 20px;
-    margin-top: 50px;
-    display: flex;
-    gap: 20px;
-    border: 2px solid #FFFFFF;
-    width: 398px;
-    height: 114px;
-}
-
-.button {
-    margin-top: 15px;
-    margin-left: 40px;
-    width: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-}
-
-.button img {
-    width: 60px;
-    height: 60px;
-}
-
-.button span {
-    margin-top: 5px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #FFFFFF;
-}
-
-.button.active  img {
-    margin-top: -10px;
-    width: 100px;
-    height: 100px;
-}
-
-
-.button.active span {
-    margin-top: -22px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #39FF14;
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    60% { 
+        opacity: 1; /* Первые 3 секунды без изменений */
+    }
+    100% {
+        opacity: 0; /* Последующие 2 секунды исчезновение */
+    }
 }
