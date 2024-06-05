@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Reset score
         score = 0;
-        scoreDisplay.textContent = `Счет: ${score}`;
+        scoreDisplay.textContent = `coins: ${score}`;
 
         // Reset main square position
         mainSquare.style.left = '50%';
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             greenSquares = greenSquares.filter(sq => sq !== target);
 
             score++;
-            scoreDisplay.textContent = `Счет: ${score}`;
+            scoreDisplay.textContent = `coins: ${score}`;
 
             if (greenSquares.length < 4) {
                 createGreenSquare();
@@ -108,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
             createGreenSquare();
         }
     }, 1000);
+
 
     function scheduleLaser() {
         const delay = Math.random() * 10000 + 10000;
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const checkCollisionInterval = setInterval(() => {
                 if (checkCollision(mainSquare, laser)) {
                     clearInterval(checkCollisionInterval);
-                    alert('Игра окончена! Ваш счет: ' + score);
+                    alert('Игра окончена! coins: ' + score);
                     resetGame();
                 }
             }, 10);
@@ -278,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const checkCollisionInterval = setInterval(() => {
                         if (checkCollision(mainSquare, saw)) {
                             clearInterval(checkCollisionInterval);
-                            alert('Игра окончена! Ваш счет: ' + score);
+                            alert('Игра окончена! coins: ' + score);
                             resetGame();
                         }
                     }, 10);
@@ -317,5 +318,6 @@ document.addEventListener("DOMContentLoaded", () => {
         scheduleSaw();
     }, 3000);
 });
+
 
 
