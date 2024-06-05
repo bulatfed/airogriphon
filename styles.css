@@ -40,7 +40,7 @@ body, html {
 .greenSquare {
     width: 48px;
     height: 48px;
-    background-image: url(/only_game/icons8-coin-48\ 2.png);
+    background-image: url(/icons8-coin-48\ 2.png);
     position: absolute;
     animation: fadeOut 5s forwards;
 }
