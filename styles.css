@@ -10,9 +10,29 @@ body, html {
     background-color: #2C2C2C;
 }
 
+#statusBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+}
+
+
 #score {
+    margin: 0 10px;
     font-size: 24px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    font-family: 'GEO', sans-serif;
+    font-size: 40px;
+    font-style: oblique;
+    color: #FFFFFF;
+}
+
+#timer {
+    margin: 0 10px;
+    font-size: 24px;
+    /* margin-bottom: 20px; */
     font-family: 'GEO', sans-serif;
     font-size: 40px;
     font-style: oblique;
@@ -40,9 +60,25 @@ body, html {
 .greenSquare {
     width: 48px;
     height: 48px;
-    background-image: url(/coin.png);
+    background-image: url(coin.png);
     position: absolute;
     animation: fadeOut 5s forwards;
+}
+
+.blackSquare {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background-image: url(coin_red.png);
+    border-radius: 50%;
+}
+
+.specialSquare {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-image: url(coin_grean.png);
 }
 
 #laser {
