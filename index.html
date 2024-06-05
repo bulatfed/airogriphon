@@ -9,13 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Geo&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="score">coins: 000</div>
+    <div id="statusBar">
+        <div id="timer">Таймер: 180</div>
+        <div id="score">Счет: 0</div>
+    </div>
     <div id="gameField">
         <div id="mainSquare"></div>
         <div id="laser" class="hidden"></div>
         <div id="saw" class="hidden"></div>
         <div id="sawWarning" class="hidden"></div>
-        <div id="blackSquare" class="hidden"></div>
     </div>
     <script src="script.js"></script>
 </body>
