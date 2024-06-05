@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameField = document.getElementById("gameField");
     const mainSquare = document.getElementById("mainSquare");
     const scoreDisplay = document.getElementById("score");
+    const timerDisplay = document.getElementById("timer");
     const laser = document.getElementById("laser");
     const saw = document.getElementById("saw");
     const sawWarning = document.getElementById("sawWarning");
@@ -9,39 +10,49 @@ document.addEventListener("DOMContentLoaded", () => {
     let isMoving = false;
     let greenSquares = [];
     let score = 0;
+    let timeLeft = 180;
+    let gameInterval;
     let laserInterval;
     let sawInterval;
+    let blackSquareInterval;
+    let specialSquareInterval;
 
     function resetGame() {
+        clearInterval(gameInterval);
         clearInterval(laserInterval);
         clearInterval(sawInterval);
+        clearInterval(blackSquareInterval);
+        clearInterval(specialSquareInterval);
 
-        // Reset score
+        // Reset score and timer
         score = 0;
-        scoreDisplay.textContent = `coins: ${score}`;
+        timeLeft = 180;
+        scoreDisplay.textContent = `Счет: ${score}`;
+        timerDisplay.textContent = `Таймер: ${timeLeft}`;
 
         // Reset main square position
         mainSquare.style.left = '50%';
         mainSquare.style.top = '50%';
 
-        // Remove all green squares
+        // Remove all green, black, and special squares
         greenSquares.forEach(square => square.remove());
+        document.querySelectorAll('.blackSquare').forEach(square => square.remove());
+        document.querySelectorAll('.specialSquare').forEach(square => square.remove());
         greenSquares = [];
 
-        // Generate initial green squares
-        generateInitialGreenSquares();
-
-        // Hide laser and saw
+        // Hide laser, saw, and warnings
         laser.classList.add('hidden');
         saw.classList.add('hidden');
         sawWarning.classList.add('hidden');
-        laser.style.transition = 'none';
-        saw.style.transition = 'none';
-        sawWarning.style.transition = 'none';
 
-        // Schedule laser and saw activations
+        // Schedule laser, saw, black square, and special square activations
         scheduleLaser();
         scheduleSaw();
+        scheduleBlackSquare();
+        scheduleSpecialSquare();
+
+        // Start the game timer
+        startTimer();
     }
 
     function generateInitialGreenSquares() {
@@ -74,33 +85,94 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 5000);
     }
 
-    gameField.addEventListener("click", (event) => {
-        if (isMoving) return;
+    function createBlackSquare() {
+        const blackSquare = document.createElement('div');
+        blackSquare.classList.add('blackSquare');
 
-        const target = event.target;
-        if (!target.classList.contains('greenSquare')) return;
+        const randomX = Math.random() * (gameField.clientWidth - 30);
+        const randomY = Math.random() * (gameField.clientHeight - 30);
 
-        isMoving = true;
+        blackSquare.style.left = `${randomX}px`;
+        blackSquare.style.top = `${randomY}px`;
 
-        const targetX = target.style.left;
-        const targetY = target.style.top;
-
-        mainSquare.style.left = targetX;
-        mainSquare.style.top = targetY;
+        gameField.appendChild(blackSquare);
 
         setTimeout(() => {
-            target.remove();
-            greenSquares = greenSquares.filter(sq => sq !== target);
-
-            score++;
-            scoreDisplay.textContent = `coins: ${score}`;
-
-            if (greenSquares.length < 4) {
-                createGreenSquare();
+            if (blackSquare.parentElement) {
+                blackSquare.remove();
             }
+        }, 5000);
+    }
 
-            isMoving = false;
-        }, 600);
+    function createSpecialSquare() {
+        const specialSquare = document.createElement('div');
+        specialSquare.classList.add('specialSquare');
+
+        const randomX = Math.random() * (gameField.clientWidth - 30);
+        const randomY = Math.random() * (gameField.clientHeight - 30);
+
+        specialSquare.style.left = `${randomX}px`;
+        specialSquare.style.top = `${randomY}px`;
+
+        gameField.appendChild(specialSquare);
+
+        setTimeout(() => {
+            if (specialSquare.parentElement) {
+                specialSquare.remove();
+            }
+        }, 5000);
+    }
+
+    gameField.addEventListener("click", (event) => {
+        const target = event.target;
+
+        if (target.classList.contains('greenSquare') && !isMoving) {
+            isMoving = true;
+
+            const targetX = target.style.left;
+            const targetY = target.style.top;
+
+            mainSquare.style.left = targetX;
+            mainSquare.style.top = targetY;
+
+            setTimeout(() => {
+                target.remove();
+                greenSquares = greenSquares.filter(sq => sq !== target);
+
+                score++;
+                scoreDisplay.textContent = `Счет: ${score}`;
+
+                if (greenSquares.length < 4) {
+                    createGreenSquare();
+                }
+
+                isMoving = false;
+            }, 600);
+        }
+
+        if (target.classList.contains('specialSquare') && !isMoving) {
+            isMoving = true;
+
+            const targetX = target.style.left;
+            const targetY = target.style.top;
+
+            mainSquare.style.left = targetX;
+            mainSquare.style.top = targetY;
+
+            setTimeout(() => {
+                target.remove();
+
+                score += 10;
+                scoreDisplay.textContent = `Счет: ${score}`;
+
+                isMoving = false;
+            }, 10);
+        }
+
+        if (target.classList.contains('blackSquare')) {
+            alert('Игра окончена! Ваш счет: ' + score);
+            resetGame();
+        }
     });
 
     setInterval(() => {
@@ -108,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
             createGreenSquare();
         }
     }, 1000);
-
 
     function scheduleLaser() {
         const delay = Math.random() * 10000 + 10000;
@@ -149,18 +220,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             laser.style.transition = 'all 2s ease';
-            if (direction === 0) { // Move from left to right
-                laser.style.left = `${gameField.clientWidth}px`;
-            } else if (direction === 1) { // Move from right to left
-                laser.style.right = `${gameField.clientWidth}px`;
-            } else { // Move from top to bottom
-                laser.style.top = `${gameField.clientHeight}px`;
+            if (direction === 0 || direction === 1) { // Move from left or right
+                laser.style.width = '100%';
+            } else { // Move from top or bottom
+                laser.style.height = '100%';
             }
 
             const checkCollisionInterval = setInterval(() => {
                 if (checkCollision(mainSquare, laser)) {
                     clearInterval(checkCollisionInterval);
-                    alert('Игра окончена! coins: ' + score);
+                    alert('Игра окончена! Ваш счет: ' + score);
                     resetGame();
                 }
             }, 10);
@@ -169,19 +238,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 clearInterval(checkCollisionInterval);
                 laser.classList.add('hidden');
                 laser.style.transition = 'none';
-                if (direction === 0) {
-                    laser.style.left = '0';
-                } else if (direction === 1) {
-                    laser.style.right = '0';
-                } else {
-                    laser.style.top = '0';
-                }
+                laser.style.left = '0';
+                laser.style.right = '0';
+                laser.style.top = '0';
+                laser.style.bottom = '0';
             }, 2000);
         }, 2000);
     }
 
     function scheduleSaw() {
-        const delay = Math.random() * 10000 + 10000;
+        const delay = Math.random() * 20000 + 10000;
         sawInterval = setTimeout(() => {
             activateSaw();
             scheduleSaw();
@@ -193,8 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const sawWidth = gameField.clientWidth * 0.35;
         const sawHeight = gameField.clientHeight * 0.45;
 
-        // Show warning before saw appears
-        sawWarning.style.transition = 'opacity 0.5s ease-in-out';
         sawWarning.style.opacity = '1';
         setTimeout(() => {
             sawWarning.style.opacity = '0';
@@ -279,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const checkCollisionInterval = setInterval(() => {
                         if (checkCollision(mainSquare, saw)) {
                             clearInterval(checkCollisionInterval);
-                            alert('Игра окончена! coins: ' + score);
+                            alert('Игра окончена! Ваш счет: ' + score);
                             resetGame();
                         }
                     }, 10);
@@ -298,7 +362,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 2000);
         }, 2000);
     }
-    
+
+    function scheduleBlackSquare() {
+        const delay = Math.random() * 3000 + 2000; // Random delay between 2 to 5 seconds
+        blackSquareInterval = setTimeout(() => {
+            createBlackSquare();
+            scheduleBlackSquare();
+        }, delay);
+    }
+
+    function scheduleSpecialSquare() {
+        const delay = Math.random() * 6000 + 7000; // Random delay between 7 to 13 seconds
+        specialSquareInterval = setTimeout(() => {
+            createSpecialSquare();
+            scheduleSpecialSquare();
+        }, delay);
+    }
+
     function checkCollision(square, obstacle) {
         const squareRect = square.getBoundingClientRect();
         const obstacleRect = obstacle.getBoundingClientRect();
@@ -311,13 +391,30 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
+    function startTimer() {
+        gameInterval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.textContent = `Таймер: ${timeLeft}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(gameInterval);
+                alert('Время вышло! Ваш счет: ' + score);
+                resetGame();
+            }
+        }, 1000);
+    }
+
     setTimeout(() => {
         mainSquare.style.display = 'block';
         generateInitialGreenSquares();
         scheduleLaser();
         scheduleSaw();
+        scheduleBlackSquare();
+        scheduleSpecialSquare();
+        startTimer();
     }, 3000);
 });
+
 
 
 
