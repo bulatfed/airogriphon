@@ -10,6 +10,9 @@
     <div id="score">Счет: 0</div>
     <div id="gameField">
         <div id="mainSquare"></div>
+        <div id="laser" class="hidden"></div>
+        <div id="saw" class="hidden"></div>
+        <div id="sawWarning" class="hidden"></div>
     </div>
     <script src="script.js"></script>
 </body>
