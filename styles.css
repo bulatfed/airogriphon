@@ -29,15 +29,45 @@ body, html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: all 1s ease; /* Увеличена скорость перемещения */
+    transition: all 0.6s ease; /* Увеличена скорость перемещения */
 }
 
 .greenSquare {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     background-color: green;
     position: absolute;
     animation: fadeOut 5s forwards;
+}
+
+#laser {
+    position: absolute;
+    width: 5px;
+    height: 25%;
+    background-color: red;
+    transition: all 2s ease;
+}
+
+/* #saw {
+    position: absolute;
+    width: 35%;
+    height: 45%;
+    background-color: teal;
+    transition: all 2s ease;
+} */
+
+#saw, #sawWarning {
+    position: absolute;
+    background-color: teal;
+    transition: all 2s ease;
+}
+
+#sawWarning {
+    background-color: rgba(0, 128, 128, 0.5);
+}
+
+.hidden {
+    display: none;
 }
 
 @keyframes fadeOut {
