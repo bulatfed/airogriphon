@@ -7,24 +7,29 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #2C2C2C;
 }
 
 #score {
     font-size: 24px;
     margin-bottom: 20px;
+    font-family: 'GEO', sans-serif;
+    font-size: 40px;
+    font-style: oblique;
+    color: #FFFFFF;
 }
 
 #gameField {
     width: 90vw;
     height: 90vh;
-    background-color: lightgrey;
+    background-color: #0B0B0B;
     position: relative;
 }
 
 #mainSquare {
-    width: 50px;
-    height: 50px;
-    background-color: white;
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -33,9 +38,9 @@ body, html {
 }
 
 .greenSquare {
-    width: 50px;
-    height: 50px;
-    background-color: green;
+    width: 48px;
+    height: 48px;
+    background-image: url(/only_game/icons8-coin-48\ 2.png);
     position: absolute;
     animation: fadeOut 5s forwards;
 }
@@ -58,12 +63,21 @@ body, html {
 
 #saw, #sawWarning {
     position: absolute;
-    background-color: teal;
+    border:5px solid #39FF14;
     transition: all 2s ease;
 }
 
 #sawWarning {
     background-color: rgba(0, 128, 128, 0.5);
+}
+
+#blackSquare {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    z-index: 1;
+    border-radius: 5px;
 }
 
 .hidden {
