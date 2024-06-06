@@ -1,0 +1,133 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2C2C2C;
+}
+
+#statusBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+}
+
+
+#score {
+    margin: 0 10px;
+    font-size: 24px;
+    /* margin-bottom: 20px; */
+    font-family: 'GEO', sans-serif;
+    font-size: 40px;
+    font-style: oblique;
+    color: #FFFFFF;
+}
+
+#timer {
+    margin: 0 10px;
+    font-size: 24px;
+    /* margin-bottom: 20px; */
+    font-family: 'GEO', sans-serif;
+    font-size: 40px;
+    font-style: oblique;
+    color: #FFFFFF;
+}
+
+#gameField {
+    width: 90vw;
+    height: 90vh;
+    background-color: #0B0B0B;
+    position: relative;
+}
+
+#mainSquare {
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease; /* Увеличена скорость перемещения */
+}
+
+.greenSquare {
+    width: 48px;
+    height: 48px;
+    background-image: url(coin.png);
+    position: absolute;
+    animation: fadeOut 5s forwards;
+}
+
+.blackSquare {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background-image: url(coin_red.png);
+    border-radius: 50%;
+}
+
+.specialSquare {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-image: url(coin_grean.png);
+}
+
+#laser {
+    position: absolute;
+    width: 5px;
+    height: 25%;
+    background-color: red;
+    transition: all 2s ease;
+}
+
+/* #saw {
+    position: absolute;
+    width: 35%;
+    height: 45%;
+    background-color: teal;
+    transition: all 2s ease;
+} */
+
+#saw, #sawWarning {
+    position: absolute;
+    border:5px solid #39FF14;
+    transition: all 2s ease;
+}
+
+#sawWarning {
+    background-color: rgba(0, 128, 128, 0.5);
+}
+
+#blackSquare {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    60% { 
+        opacity: 1; /* Первые 3 секунды без изменений */
+    }
+    100% {
+        opacity: 0; /* Последующие 2 секунды исчезновение */
+    }
+}
